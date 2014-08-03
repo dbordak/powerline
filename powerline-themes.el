@@ -336,6 +336,8 @@
                 (when (and (boundp 'wc-mode) wc-mode)
                   (powerline-wc-mode face2 'r))
                 (funcall separator-right face2 face1)
+                (if (null window-system)
+                    (powerline-raw (concat " " (char-to-string #xe0a1)) face1))
                 (powerline-raw "  " face1)
                 (powerline-raw global-mode-string face1 'r)
                 (powerline-raw " " face1)
