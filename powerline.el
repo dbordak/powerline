@@ -46,11 +46,13 @@
   "Powerline face 2."
   :group 'powerline)
 
-(defcustom powerline-default-separator 'arrow
-  "The separator to use for the default theme.
+(defcustom powerline-default-separator (if (window-system)
+                                           'arrow
+                                         'utf-8)
+    "The separator to use for the default theme.
 
 Valid Values: arrow, slant, chamfer, wave, brace, roundstub,
-zigzag, butt, rounded, contour, curve"
+zigzag, butt, rounded, contour, curve, utf-8"
   :group 'powerline
   :type '(choice (const alternate)
                  (const arrow)
@@ -67,7 +69,8 @@ zigzag, butt, rounded, contour, curve"
                  (const slant)
                  (const wave)
                  (const zigzag)
-                 (const nil)))
+                 (const nil)
+                 (const utf-8)))
 
 (defcustom powerline-default-separator-dir '(left . right)
   "The separator direction to use for the default theme.
@@ -79,6 +82,16 @@ DIR must be one of: left, right"
   :group 'powerline
   :type '(cons (choice :tag "Left Hand Side" (const left) (const right))
                (choice :tag "Right Hand Side" (const left) (const right))))
+
+(defcustom powerline-utf-8-separator-left #xe0b0
+    "The unicode character number for the left facing separator"
+    :group 'powerline
+    :type  '(choice integer (const nil)))
+
+(defcustom powerline-utf-8-separator-right #xe0b2
+    "The unicode character number for the right facing separator"
+    :group 'powerline
+    :type  '(choice integer (const nil)))
 
 (defcustom powerline-height nil
   "Override the mode-line height."
@@ -218,7 +231,7 @@ static char * %s[] = {
      'xpm t :ascent 'center)))
 
 (defun pl/percent-xpm
-  (height pmax pmin winend winstart width color1 color2)
+    (height pmax pmin winend winstart width color1 color2)
   "Generate percentage xpm of HEIGHT for PMAX to PMIN given WINEND and WINSTART with WIDTH and COLOR1 and COLOR2."
   (let* ((height- (1- height))
          (fillstart (round (* height- (/ (float winstart) (float pmax)))))
@@ -241,8 +254,8 @@ static char * %s[] = {
 (defun powerline-hud (face1 face2 &optional width)
   "Return an XPM of relative buffer location using FACE1 and FACE2 of optional WIDTH."
   (unless width (setq width 2))
-  (let ((color1 (if face1 (face-attribute face1 :background) "None"))
-        (color2 (if face2 (face-attribute face2 :background) "None"))
+  (let ((color1 (if face1 (face-background face1) "None"))
+        (color2 (if face2 (face-background face2) "None"))
         (height (or powerline-height (frame-char-height)))
         pmax
         pmin
@@ -288,7 +301,7 @@ static char * %s[] = {
 (defmacro defpowerline (name body)
   "Create function NAME by wrapping BODY with powerline padding an propetization."
   `(defun ,name
-     (&optional face pad)
+       (&optional face pad)
      (powerline-raw ,body face pad)))
 
 (defun pl/property-substrings (str prop)
@@ -405,9 +418,12 @@ static char * %s[] = {
 
 ;;;###autoload
 (defpowerline powerline-vc
-  (when (and (buffer-file-name (current-buffer))
-             vc-mode)
-    (format-mode-line '(vc-mode vc-mode))))
+    (when (and (buffer-file-name (current-buffer)) vc-mode)
+        (if (null window-system)
+                (let ((backend (vc-backend (buffer-file-name (current-buffer)))))
+                    (when backend
+                        (concat " " (char-to-string #xe0a0) " " (vc-working-revision (buffer-file-name (current-buffer)) backend))))
+            (format-mode-line '(vc-mode vc-mode)))))
 
 ;;;###autoload
 (defpowerline powerline-buffer-size
@@ -654,14 +670,22 @@ mouse-1: Display Line and Column Mode Menu")
 
 (add-hook 'minibuffer-exit-hook 'pl/minibuffer-exit)
 
+(defun powerline-set-selected-window ()
+  "sets the variable `powerline-selected-window` appropriately"
+  (when (not (minibuffer-window-active-p (frame-selected-window)))
+    (setq powerline-selected-window (frame-selected-window))))
+
+(add-hook 'window-configuration-change-hook 'powerline-set-selected-window)
+(add-hook 'focus-in-hook 'powerline-set-selected-window)
+(add-hook 'focus-out-hook 'powerline-set-selected-window)
+
+(defadvice select-window (after powerline-select-window activate)
+  "makes powerline aware of window changes"
+  (powerline-set-selected-window))
+
 (defun powerline-selected-window-active ()
   "Return whether the current window is active."
-  (or (eq (frame-selected-window)
-          (selected-window))
-      (and (minibuffer-window-active-p
-            (frame-selected-window))
-           (eq (pl/minibuffer-selected-window)
-               (selected-window)))))
+  (eq powerline-selected-window (selected-window)))
 
 (defun powerline-revert ()
   "Revert to the default Emacs mode-line."
