@@ -1,9 +1,7 @@
-English is not my first language, so feel free to correct me of any mistake.
-
 powerline
 =========
 
-This version is forked from [milkypostman's one](https://github.com/milkypostman/powerline), and provide better support for Evil.
+This version is forked from [Dewdrops's](https://github.com/Dewdrops/powerline) fork of [milkypostman's powerline](https://github.com/milkypostman/powerline). It includes the changes in [unic0rn's fork](https://github.com/unic0rn/powerline) to better handle running in a terminal emulator.
 
 
 ## Features
