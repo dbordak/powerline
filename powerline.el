@@ -113,7 +113,7 @@ This is needed to make sure that text is properly aligned."
   :group 'powerline
   :type 'boolean)
 
-(defcustom powerline-use-hud t
+(defcustom powerline-use-hud nil
   "Whether to show hud in the rightmost"
   :group 'powerline
   :type 'boolean)
