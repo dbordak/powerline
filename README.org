@@ -1,0 +1,29 @@
+#+Title: powerline
+
+This version of powerline is forked from [[https://github.com/emmel/powerline][emmel's]] fork of [[https://github.com/Dewdrops/powerline][Dewdrops's]] fork of [[https://github.com/milkypostman/powerline][milkypostman's powerline]], which was forked from [[http://www.emacswiki.org/emacs/PowerLine][powerline.el from the Emacs Wiki]], which is in turn based off of [[https://github.com/Lokaltog/vim-powerline][Lokaltog's vim-powerline]].
+It includes the changes in [[https://github.com/unic0rn/powerline][unic0rn's fork]] to better handle running in a terminal emulator.
+I sincerely hope this chain doesn't get any longer.
+
+** Features
+
+- Two themes designed to be used with Evil, which will change state tag's color according to current state (some code is stolen from [[https://github.com/laynor/emacs-conf/blob/master/packages/sm-package-powerline.el][this repo]]).
+
+- Correctly handle =column-number-mode=, =size-indication-mode= etc.
+  Local maps in mode line are properly set too.
+
+- Retain as much as possible information of original mode line but still keep clean and simple.
+
+- Support =which-function-mode=, =wc-mode=, =paradox= and =mode-line-debug-mode=.
+
+** Installation
+
+#+BEGIN_SRC emacs-lisp
+(require 'powerline)
+(powerline-evil-theme)
+#+END_SRC
+
+The second line customizes =mode-line-format= to mimick =vim-airline=, including Evil integration to colorize the modeline depending upon your current mode.
+
+** Screenshots
+
+[[https://github.com/Dewdrops/powerline/blob/master/evil.png?raw=true]]
