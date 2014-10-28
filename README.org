@@ -13,7 +13,7 @@ I sincerely hope this chain doesn't get any longer.
 
 - Retain as much as possible information of original mode line but still keep clean and simple.
 
-- Support =which-function-mode=, =wc-mode=, =paradox= and =mode-line-debug-mode=.
+- Support =which-function-mode=, [[https://github.com/bnbeckwith/wc-mode][wc-mode]], [[https://github.com/Bruce-Connor/paradox][paradox]] and [[https://github.com/tarsius/mode-line-debug][mode-line-debug-mode]].
 
 ** Installation
 
