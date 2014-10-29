@@ -491,6 +491,14 @@ mouse-2: toggle rest visibility\nmouse-3: go to end"
        (int-to-string (line-number-at-pos (point-max)))
        ")")
   (concat
+   (if size-indication-mode
+       (propertize
+        " of %I"
+        'local-map mode-line-column-line-number-mode-map
+        'mouse-face 'mode-line-highlight
+        'help-echo "Size indication mode\n\
+mouse-1: Display Line and Column Mode Menu")
+     "")
    (if (and column-number-mode line-number-mode)
        (propertize
         " %l:%2c"
@@ -519,14 +527,7 @@ mouse-1: Display Line and Column Mode Menu")
     'mouse-face 'mode-line-highlight
     'help-echo "Size indication mode\n\
 mouse-1: Display Line and Column Mode Menu")
-   (if size-indication-mode
-       (propertize
-        " of %I"
-        'local-map mode-line-column-line-number-mode-map
-        'mouse-face 'mode-line-highlight
-        'help-echo "Size indication mode\n\
-mouse-1: Display Line and Column Mode Menu")
-     ""))))
+   )))
 
 (eval-after-load 'wc-mode
   '(defpowerline powerline-wc-mode
