@@ -493,7 +493,7 @@ mouse-2: toggle rest visibility\nmouse-3: go to end"
   (concat
    (if (and column-number-mode line-number-mode)
        (propertize
-        " (%l,%2c)"
+        " %l:%2c"
         'local-map mode-line-column-line-number-mode-map
         'mouse-face 'mode-line-highlight
         'help-echo "Line number and Column number\n\
