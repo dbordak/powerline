@@ -6,7 +6,7 @@ I sincerely hope this chain doesn't get any longer.
 
 ** Features
 
-- Two themes designed to be used with Evil, which will change state tag's color according to current state (some code is stolen from [[https://github.com/laynor/emacs-conf/blob/master/packages/sm-package-powerline.el][this repo]]).
+- A theme designed to be used with Evil, which will change state tag's color according to current state (some code is stolen from [[https://github.com/laynor/emacs-conf/blob/master/packages/sm-package-powerline.el][this repo]]).
 
 - Correctly handle =column-number-mode=, =size-indication-mode= etc.
   Local maps in mode line are properly set too.

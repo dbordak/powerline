@@ -12,8 +12,7 @@
 ;;; Commentary:
 ;;
 ;; Separators for Powerline.
-;; Included separators: alternate, arrow, arrow-fade, bar, box, brace, butt,
-;; chamfer, contour, curve, rounded, roundstub, slant, wave, zigzag, and nil.
+;; Included separators: arrow, bar, box, butt, contour, slant, nil, and utf-8.
 ;;
 
 ;;; Code:
@@ -133,12 +132,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                                  ,dst-face)))))))
 
 
-(defmacro pl/alternate (dir)
-  "Generate an alternating pattern XPM function for DIR."
-  (pl/pattern-defun "alternate" dir 4
-                    '((2 2 1 1)
-                      (0 0 2 2))))
-
 (defmacro pl/arrow (dir)
   "Generate an arrow XPM function for DIR."
   (let ((row-modifier (if (eq dir 'left) 'identity 'reverse)))
@@ -151,19 +144,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                        (pl/pattern-to-string (make-list middle-width 0)))
                      (cl-loop for i from width downto 0
                               concat (pl/pattern-to-string (,row-modifier (pl/row-pattern i middle-width))))))))
-
-(defmacro pl/arrow-fade (dir)
-  "Generate an arrow-fade XPM function for DIR."
-  (let* ((row-modifier (if (eq dir 'left) 'identity 'reverse)))
-    (pl/wrap-defun "arrow-fade" dir 'middle-width
-                   '((width (1- (/ height 2)))
-                     (middle-width (1+ (ceiling height 2))))
-                   `((cl-loop for i from 0 to width
-                              concat (pl/pattern-to-string (,row-modifier (pl/row-pattern i middle-width 2))))
-                     (when (cl-oddp height)
-                       (pl/pattern-to-string (,row-modifier (pl/row-pattern (1+ width) middle-width 2))))
-                     (cl-loop for i from width downto 0
-                              concat (pl/pattern-to-string (,row-modifier (pl/row-pattern i middle-width 2))))))))
 
 (defmacro pl/bar (dir)
   "Generate a bar XPM function for DIR."
@@ -178,23 +158,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                       (1 1)
                       (1 1))))
 
-(defmacro pl/brace (dir)
-  "Generate a brace XPM function for DIR."
-  (pl/pattern-defun "brace" dir 4
-                    '((0 1 1 1))
-                    '((1 1 1 1)
-                      (2 1 1 1))
-                    '((2 1 1 1)
-                      (1 1 1 1))
-                    '((0 1 1 1))
-                    '((0 2 1 1)
-                      (0 2 1 1)
-                      (0 0 2 1)
-                      (0 0 0 0)
-                      (0 0 2 1)
-                      (0 2 1 1)
-                      (0 2 1 1))))
-
 (defmacro pl/butt (dir)
   "Generate a butt XPM function for DIR."
   (pl/pattern-defun "butt" dir 3
@@ -205,14 +168,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                     '((0 0 1)
                       (0 1 1)
                       (1 1 1))))
-
-(defmacro pl/chamfer (dir)
-  "Generate a chamfer XPM function for DIR."
-  (pl/pattern-defun "chamfer" dir 3
-                    '((0 0 0))
-                    '((1 1 1)
-                      (0 1 1)
-                      (0 0 1))))
 
 (defmacro pl/contour (dir)
   "Generate a contour XPM function for DIR."
@@ -230,45 +185,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                       (0 0 0 0 0 0 0 2 1 1)
                       (0 0 0 0 0 0 0 0 0 0))))
 
-(defmacro pl/curve (dir)
-  "Generate a curve XPM function for DIR."
-  (pl/pattern-defun "curve" dir 4
-                    '((0 0 0 0))
-                    '((1 1 1 1)
-                      (2 1 1 1)
-                      (0 0 1 1)
-                      (0 0 2 1)
-                      (0 0 0 1)
-                      (0 0 0 2))
-                    '((0 0 0 2)
-                      (0 0 0 1)
-                      (0 0 2 1)
-                      (0 0 1 1)
-                      (2 1 1 1)
-                      (1 1 1 1))))
-
-(defmacro pl/rounded (dir)
-  "Generate a rounded XPM function for DIR."
-  (pl/pattern-defun "rounded" dir 6
-                    '((0 0 0 0 0 0))
-                    '((2 1 1 1 1 1)
-                      (0 0 2 1 1 1)
-                      (0 0 0 0 1 1)
-                      (0 0 0 0 2 1)
-                      (0 0 0 0 0 1)
-                      (0 0 0 0 0 2))))
-
-(defmacro pl/roundstub (dir)
-  "Generate a roundstub XPM function for DIR."
-  (pl/pattern-defun "roundstub" dir 3
-                    '((0 0 0))
-                    '((1 1 1)
-                      (0 0 1)
-                      (0 0 2))
-                    '((0 0 2)
-                      (0 0 1)
-                      (1 1 1))))
-
 (defmacro pl/slant (dir)
   "Generate a slant XPM function for DIR."
   (let* ((row-modifier (if (eq dir 'left) 'identity 'reverse)))
@@ -276,37 +192,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                    '((width (1- (ceiling height 2))))
                    `((cl-loop for i from 0 to height
                               concat (pl/pattern-to-string (,row-modifier (pl/row-pattern (/ i 2) width))))))))
-
-(defmacro pl/wave (dir)
-  "Generate a wave XPM function for DIR."
-  (pl/pattern-defun "wave" dir 11
-                    '((0 0 0 0 0 0 1 1 1 1 1))
-                    '((2 1 1 1 1 1 1 1 1 1 1)
-                      (0 0 1 1 1 1 1 1 1 1 1)
-                      (0 0 0 1 1 1 1 1 1 1 1)
-                      (0 0 0 2 1 1 1 1 1 1 1)
-                      (0 0 0 0 1 1 1 1 1 1 1)
-                      (0 0 0 0 2 1 1 1 1 1 1)
-                      (0 0 0 0 0 1 1 1 1 1 1)
-                      (0 0 0 0 0 1 1 1 1 1 1)
-                      (0 0 0 0 0 2 1 1 1 1 1))
-                    '((0 0 0 0 0 0 2 1 1 1 1)
-                      (0 0 0 0 0 0 0 1 1 1 1)
-                      (0 0 0 0 0 0 0 1 1 1 1)
-                      (0 0 0 0 0 0 0 2 1 1 1)
-                      (0 0 0 0 0 0 0 0 1 1 1)
-                      (0 0 0 0 0 0 0 0 2 1 1)
-                      (0 0 0 0 0 0 0 0 0 0 2))))
-
-(defmacro pl/zigzag (dir)
-  "Generate a zigzag pattern XPM function for DIR."
-  (pl/pattern-defun "zigzag" dir 3
-                    '((1 1 1)
-                      (0 1 1)
-                      (0 0 1)
-                      (0 0 0)
-                      (0 0 1)
-                      (0 1 1))))
 
 (defmacro pl/nil (dir)
   "Generate a XPM function that returns nil for DIR."
