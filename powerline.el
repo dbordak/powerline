@@ -501,7 +501,7 @@ mouse-1: Display Line and Column Mode Menu")
      "")
    (if (and column-number-mode line-number-mode)
        (propertize
-        " %l:%2c"
+        " %3l:%2c"
         'local-map mode-line-column-line-number-mode-map
         'mouse-face 'mode-line-highlight
         'help-echo "Line number and Column number\n\
