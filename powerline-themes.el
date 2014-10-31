@@ -201,21 +201,22 @@
                (powerline-buffer-id face2 'l)
                ; (powerline-raw mode-line-modified face2 'l)
                (when (buffer-modified-p)
-                 (powerline-raw "[+]" mode-line))
+                 (powerline-raw "[+]" face2))
                (when buffer-read-only
-                 (powerline-raw "[RO]" mode-line))))
+                 (powerline-raw "[RO]" face2))))
              (rhs
               (append
                (when (and (boundp 'which-function-mode) which-function-mode)
                  (list
-                  (powerline-raw "[" face2)
                   (powerline-which-func)
-                  (powerline-raw "] " face2)
-                  (funcall secondary-separator-right face2 face1)))
+                  (powerline-raw " " face2)
+                  (funcall secondary-separator-right face1 face2)
+                  (powerline-raw " " face2)))
                (list
                 (when (and (boundp 'wc-mode) wc-mode)
                   (powerline-wc-mode face2 'r))
                 (powerline-major-mode face2)
+                (powerline-raw " " face2)
                 (funcall primary-separator-right face2 face1)
                 (powerline-raw global-mode-string face1 'r)
                 (funcall primary-separator-right face1 evil-face)
