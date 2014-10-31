@@ -12,7 +12,8 @@
 ;;; Commentary:
 ;;
 ;; Separators for Powerline.
-;; Included separators: arrow, bar, box, butt, contour, slant, nil, and utf-8.
+;; Included separators: arrow, arrow-hollow, bar, box, butt, contour, slant,
+;; nil, and utf-8.
 ;;
 
 ;;; Code:
@@ -60,6 +61,12 @@ COLOR1 and COLOR2 must be supplied as hex strings with a leading #."
             (make-list fade 2)
             (make-list (- total fill fade) 1))))
 
+(defun pl/row-pattern-hollow (left-padding total)
+  "Make a list that has LEFT-PADDING 0s, followed by a 2 and a 1, then up to TOTAL 0s."
+  (let ((left-padding (min left-padding (- total 2))))
+    (append (make-list left-padding 0)
+            '(2 1)
+            (make-list (- total left-padding 2) 0))))
 
 (defun pl/pattern-defun (name dir width &rest patterns)
   "Create a powerline function of NAME in DIR with WIDTH for PATTERNS.
@@ -131,7 +138,6 @@ destination color, and 2 is the interpolated color between 0 and 1."
                          :face (when (and face1 face2)
                                  ,dst-face)))))))
 
-
 (defmacro pl/arrow (dir)
   "Generate an arrow XPM function for DIR."
   (let ((row-modifier (if (eq dir 'left) 'identity 'reverse)))
@@ -144,6 +150,19 @@ destination color, and 2 is the interpolated color between 0 and 1."
                        (pl/pattern-to-string (make-list middle-width 0)))
                      (cl-loop for i from width downto 0
                               concat (pl/pattern-to-string (,row-modifier (pl/row-pattern i middle-width))))))))
+
+(defmacro pl/arrow-hollow (dir)
+  "Generate an arrow-hollow XPM function for DIR."
+  (let* ((row-modifier (if (eq dir 'left) 'identity 'reverse)))
+    (pl/wrap-defun "arrow-hollow" dir 'middle-width
+                   '((width (1- (/ height 2)))
+                     (middle-width (1+ (ceiling height 2))))
+                   `((cl-loop for i from 0 to width
+                              concat (pl/pattern-to-string (,row-modifier (pl/row-pattern-hollow i middle-width))))
+                     (when (cl-oddp height)
+                       (pl/pattern-to-string (,row-modifier (pl/row-pattern-hollow (1+ width) middle-width))))
+                     (cl-loop for i from width downto 0
+                              concat (pl/pattern-to-string (,row-modifier (pl/row-pattern-hollow i middle-width))))))))
 
 (defmacro pl/bar (dir)
   "Generate a bar XPM function for DIR."
