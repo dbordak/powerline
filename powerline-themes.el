@@ -199,7 +199,11 @@
                (powerline-remote face2)
                (powerline-frame-id face2)
                (powerline-buffer-id face2 'l)
-               (powerline-raw mode-line-modified face2 'l)))
+               ; (powerline-raw mode-line-modified face2 'l)
+               (when (buffer-modified-p)
+                 (powerline-raw "[+]" mode-line))
+               (when buffer-read-only
+                 (powerline-raw "[RO]" mode-line))))
              (rhs
               (append
                (when (and (boundp 'which-function-mode) which-function-mode)
