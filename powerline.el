@@ -62,6 +62,14 @@ Valid Values: arrow, bar, box, butt, contour, slant, nil, utf-8"
                  (const nil)
                  (const utf-8)))
 
+(defcustom powerline-secondary-separator 'arrow-hollow
+  "Secondary separator which should not incur a background color change.
+
+Valid Values: arrow-hollow, nil"
+  :group 'powerline
+  :type '(choice (const arrow-hollow)
+                 (const nil)))
+
 (defcustom powerline-default-separator-dir '(left . right)
   "The separator direction to use for the default theme.
 
@@ -151,6 +159,8 @@ The memoization cache is frame-local."
   (interactive)
   (pl/memoize (pl/arrow left))
   (pl/memoize (pl/arrow right))
+  (pl/memoize (pl/arrow-hollow left))
+  (pl/memoize (pl/arrow-hollow right))
   (pl/memoize (pl/bar left))
   (pl/memoize (pl/bar right))
   (pl/memoize (pl/box left))
