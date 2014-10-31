@@ -173,13 +173,7 @@
 			  (list
 			   (powerline-raw (powerline-evil-tag) evil-face)
 			   (funcall primary-separator-left evil-face face1)
-			   (powerline-raw " " face1)
-			   (powerline-raw mode-line-mule-info face1 'l)
-			   (powerline-client face1)
-			   (powerline-remote face1)
-			   (powerline-frame-id face1)
-			   (powerline-buffer-id face1 'l)
-			   (powerline-raw " " face1)
+			   (powerline-vc face1 'r)
 			   (funcall primary-separator-left face1 face2)
 			   (powerline-raw mode-line-modified face2 'l)
 			   (when (eq major-mode 'paradox-menu-mode)
@@ -202,7 +196,12 @@
 			   (powerline-recursive-right face2)
 			   (powerline-raw "  " face2)
 			   (funcall secondary-separator-left face2 face1)
-			   (powerline-vc face2 'r)))
+			   (powerline-raw mode-line-mule-info face2 'l)
+			   (powerline-client face2)
+			   (powerline-remote face2)
+			   (powerline-frame-id face2)
+			   (powerline-buffer-id face2 'l)
+			   ))
              (rhs
               (append
                (when (and (boundp 'which-function-mode) which-function-mode)
